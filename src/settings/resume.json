@@ -1,0 +1,132 @@
+{
+    "basics": {
+        "name": "Baoxiang Xu",
+        "label": "Master student",
+        "email": "baoxiang@asu.edu",
+        "phone": "+1 480 612 2350",
+        "picture": "avatar.jpg",
+        "x_title": "Hey, I'm",
+        "job": "Econ student",
+        "description": "I am a Master's student in Economics at Arizona State University, with additional training in Computer Science.\n\nBefore joining ASU, I worked as a Research Assistant at Peking University and Nanyang Technological University, contributing to research projects on land economics, firm behavior, political preferences, and investment risk. My work relies heavily on large-scale administrative and survey data, and I have extensive experience in data cleaning, integration, and empirical analysis using Python, Stata, and GIS tools.\n\nMy graduate training at ASU has strengthened my interest in microeconomic theory, particularly information economics. I am currently seeking Research Assistant or predoctoral opportunities and would be very happy to collaborate if given the opportunity.",
+        "summary": "based in Arizona, USA.",
+        "keywords": "baoxiang,xu,economics,asu,arizona,state,university,market,design,education,labor,research,academic",
+        "url": "#",
+        "location": {
+            "address": "",
+            "postalCode": "",
+            "city": "Tempe",
+            "country": "the U.S.",
+            "countryCode": "CHN",
+            "region": "Arizona"
+        },
+        "profiles": [
+            {
+                "network": "Email",
+                "username": "baoxiang@asu.edu",
+                "url": "mailto:baoxiang@asu.edu",
+                "x_icon": "fas fa-envelope"
+            },
+            {
+                "network": "LinkedIn",
+                "username": "Baoxiang Xu",
+                "url": "https://www.linkedin.com/in/baoxiang-xu-32442637b/",
+                "x_icon": "fab fa-linkedin-in"
+            },
+            {
+                "network": "GitHub",
+                "username": "baoxiangxu",
+                "url": "https://github.com/baoxiangxu",
+                "x_icon": "fab fa-github"
+            },
+            {
+                "network": "Phone",
+                "username": "+1 480 612 2350",
+                "url": "tel:+14806122350",
+                "x_icon": "fas fa-phone"
+            }
+        ]
+    },
+    "work": [
+        {
+            "company": "Company",
+            "position": "President",
+            "website": "http://company.com",
+            "startDate": "2013-01-01",
+            "endDate": "2014-01-01",
+            "summary": "Description...",
+            "highlights": ["Started the company"]
+        }
+    ],
+    "volunteer": [
+        {
+            "organization": "Organization",
+            "position": "Volunteer",
+            "website": "http://organization.com/",
+            "startDate": "2012-01-01",
+            "endDate": "2013-01-01",
+            "summary": "Description...",
+            "highlights": ["Awarded 'Volunteer of the Month'"]
+        }
+    ],
+    "education": [
+        {
+            "institution": "University",
+            "area": "Software Development",
+            "studyType": "Bachelor",
+            "startDate": "2011-01-01",
+            "endDate": "2013-01-01",
+            "gpa": "4.0",
+            "courses": ["DB1101 - Basic SQL"]
+        }
+    ],
+    "awards": [
+        {
+            "title": "Award",
+            "date": "2014-11-01",
+            "awarder": "Company",
+            "summary": "There is no spoon."
+        }
+    ],
+    "publications": [
+        {
+            "name": "Publication",
+            "publisher": "Company",
+            "releaseDate": "2014-10-01",
+            "website": "http://publication.com",
+            "summary": "Description..."
+        }
+    ],
+    "skills": [
+        {
+            "name": "Web Development",
+            "level": "Master",
+            "keywords": ["HTML", "CSS", "Javascript"]
+        }
+    ],
+    "languages": [
+        {
+            "language": "German",
+            "fluency": "Native speaker"
+        },
+        {
+            "language": "English",
+            "fluency": "Fluent speaker"
+        },
+        {
+            "language": "French",
+            "fluency": "Good knowledge"
+        }
+    ],
+    "interests": [
+        {
+            "name": "Wildlife",
+            "keywords": ["Ferrets", "Unicorns"]
+        }
+    ],
+    "references": [
+        {
+            "name": "Jane Doe",
+            "reference": "Reference..."
+        }
+    ]
+}
