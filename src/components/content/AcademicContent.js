@@ -348,7 +348,7 @@ export const AcademicContent = () => {
               </li>
             ))}
             <li className={classes.navItem}>
-              <a href="/Resume.pdf" className={classes.navLink} target="_blank" rel="noopener noreferrer">
+              <a href="/resume.pdf" className={classes.navLink} target="_blank" rel="noopener noreferrer">
                 CV
               </a>
             </li>
