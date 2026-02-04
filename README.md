@@ -1,59 +1,59 @@
-# Personal Website React
+# Baoxiang Xu - Personal Website
 
-[![Screenshot](/public/social-image.png?raw=true)](https://jolienhoop.com)
+[![Website](https://img.shields.io/website-up-down-green-red/https/baoxiangxu.github.io.svg)](https://baoxiangxu.github.io)
+[![GitHub license](https://img.shields.io/github/license/baoxiangxu/baoxiangxu.github.io.svg)](https://github.com/baoxiangxu/baoxiangxu.github.io/blob/main/LICENSE)
 
-[![Website jolienhoop.com](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://jolienhoop.com)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/JoHoop/personal-website-react/blob/master/LICENSE)
-[![GitHub contributors](https://img.shields.io/github/contributors/JoHoop/personal-website-react.svg)](https://github.com/JoHoop/personal-website-react/graphs/contributors/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/JoHoop/personal-website-react/graphs/commit-activity)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+Personal website for Baoxiang Xu - Master's student in Economics at Arizona State University.
 
-A clean, responsive, single-page webapp template for developers. View demo at [jolienhoop.com](https://jolienhoop.com)
+Visit the live site at [baoxiangxu.github.io](https://baoxiangxu.github.io)
 
--   built using [React](https://reactjs.org/)
--   bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
--   styled with [Material-UI](https://material-ui.com/)
--   deployed with [Vercel](https://vercel.com) and hosted at [jolienhoop.com](https://jolienhoop.com)
+## About
 
-Kudos to [Cody Bennett](https://github.com/CodyJasonBennett), [José Coelho](https://github.com/jcoelho93) and [Brittany Chiang](https://github.com/bchiang7) for the inspiration.
+-   Built using [React](https://reactjs.org/)
+-   Bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
+-   Styled with [Material-UI](https://material-ui.com/)
+-   Deployed on [GitHub Pages](https://pages.github.com/)
 
-## Features
+## About Me
 
--   All of the personal information is populated from the resume.json file following the [JSON Resume](https://jsonresume.org/) standard, a community driven open source initiative to create a JSON based standard for resumes. Discover the official schema [here](https://jsonresume.org/schema/).
--   The toggle/switch for the dark mode syncs its state to the local storage.
+I am a Master's student in Economics at Arizona State University, with additional training in Computer Science. My research interests include microeconomic theory, information economics, market design, and labor economics.
 
-#### Coming soon
+## About Me
 
--   Two beautiful resume page templates generated based on the data in the resume.json file -- a modern approach of the traditional printed CV.
--   Rich Google search results using structured data with [json-ld.org/](https://json-ld.org/).
+I am a Master's student in Economics at Arizona State University, with additional training in Computer Science. My research interests include microeconomic theory, information economics, market design, and labor economics.
+
+## Contact
+
+-   **Email**: baoxiang@asu.edu
+-   **LinkedIn**: [Baoxiang Xu](https://www.linkedin.com/in/baoxiang-xu-32442637b/)
+-   **GitHub**: [baoxiangxu](https://github.com/baoxiangxu)
 
 ## Customization
 
-Feel free to fork this project and customize it with your own information and style.
+The website content is populated from the `resume.json` file following the [JSON Resume](https://jsonresume.org/) standard.
 
-Refer to the [Material UI docs](https://material-ui.com/customization/theming/) for guidance on how to quickly customize the themes, components and colors to suit your tastes.
-
-If you improve the app in any way a pull request would be very much appreciated ✌️
-
-## Available Scripts
+## Development
 
 In the project directory, you can run:
 
 ### `npm install`
 
-to install the dependencies.
+Install all dependencies.
 
 ### `npm start`
 
-to run the app in the development mode at [http://localhost:3000](http://localhost:3000)<br />
+Run the app in development mode at [http://localhost:3000](http://localhost:3000)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The page will reload when you make edits.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Build the app for production to the `build` folder.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## License
+
+MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Template originally created by [Jo Lienhoop](https://github.com/JoHoop/personal-website-react)
