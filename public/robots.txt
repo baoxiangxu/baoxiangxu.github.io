@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://baoxiangxu.github.io/sitemap.xml

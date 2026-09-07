@@ -1,0 +1,81 @@
+{
+  "heading": "Research",
+  "subheading": "Publications",
+  "items": [
+    {
+      "id": "lciup-environment-economy",
+      "title": "The 'environment–economy' asymmetric effect of land conservation and intensive use policies: evidence from quasi-natural experiments at the county level in China",
+      "coauthors": "with Hongjuan Yu and Chunlai Yuan",
+      "journal": "Environment and Development Economics",
+      "year": "2026",
+      "url": "https://doi.org/10.1017/S1355770X26100552",
+      "image": "paper3",
+      "imageAlt": "Land conservation and intensive use policy — research framework",
+      "tags": [
+        {
+          "type": "policy",
+          "label": "Policy"
+        },
+        {
+          "type": "land",
+          "label": "Land"
+        },
+        {
+          "type": "environment",
+          "label": "Environment"
+        }
+      ],
+      "abstract": "This study treats the selection of land conservation and intensive use model counties as a quasi-natural experiment. Using Chinese county-level panel data, we evaluate the multi-dimensional impacts of the land conservation and intensive use policy (LCIUP). We find that LCIUP reduced PM2.5 concentrations in counties while simultaneously lowering per capita GDP, exerting a positive effect on environmental quality but a negative inhibitory effect on economic growth, showing a distinct environment–economy asymmetry. LCIUP restricts industrial land supply and curbs the entry of polluting enterprises, but fails to facilitate industrial transformation and upgrading. Counties reliant on secondary industries face significant industrial transformation lock-in challenges, while those with substantial market potential can achieve dual economic and environmental goals. Green finance policies effectively complement LCIUP to promote industrial transformation and upgrading, whereas technological innovation and talent attraction policies currently lack such synergy. Cost–benefit analysis confirms that LCIUP's marginal environmental benefits outweigh economic losses."
+    },
+    {
+      "id": "nedz-public-services",
+      "title": "The impact of national ecotourism demonstration zones policy on public services: evidence from Chinese counties",
+      "coauthors": "with Jingyi Su and Chunlai Yuan",
+      "journal": "Environment, Development and Sustainability",
+      "year": "2025",
+      "url": "https://link.springer.com/article/10.1007/s10668-025-06358-2",
+      "image": "paper2",
+      "imageAlt": "Ecotourism demonstration zones policy — research design",
+      "tags": [
+        {
+          "type": "policy",
+          "label": "Policy"
+        },
+        {
+          "type": "environment",
+          "label": "Environment"
+        },
+        {
+          "type": "public-services",
+          "label": "Public Services"
+        }
+      ],
+      "abstract": "Improving the quality of public services (PS) is essential for addressing societal issues and fulfilling the everyday needs of residents. In this context, the creation of National Ecotourism Demonstration Zones (NEDZs) presents a potentially influential policy tool. This study examines the causal impact of establishing NEDZs on the provision of PS, using panel data from Chinese counties between 2007 and 2021 and employing a multi-period difference-in-differences (DID) method. The findings reveal that the implementation of NEDZs significantly enhances the overall availability of PS, with these results remaining consistent across various sensitivity tests. The mechanisms contributing to this improvement include increased fiscal revenues, growth in the tertiary sector, and better infrastructure development. The heterogeneity analysis indicates that the policy's effects are more pronounced in central and non-border regions, as well as in counties introduced later in the program. Additionally, by integrating county-level data with the China Family Panel Studies (CFPS) data from 2012, 2014, 2016, 2018, and 2020, the study shows that the NEDZ policy significantly improves citizen satisfaction with education and healthcare services. This research underscores the wider social benefits of ecotourism policies, demonstrating their positive impacts not only on environmental and economic outcomes but also on the enhancement of PS, citizen well-being, and social equity. These insights are valuable for shaping regional development strategies and public policies focused on sustainable tourism."
+    },
+    {
+      "id": "rural-land-marketization",
+      "title": "Impact of China's rural collective construction land marketization reform on unlocking entrepreneurial potential",
+      "coauthors": "with Chunlai Yuan and Yuxi Fan",
+      "journal": "Land Use Policy",
+      "year": "2025",
+      "url": "https://doi.org/10.1016/j.landusepol.2025.107629",
+      "image": "paper1",
+      "imageAlt": "China's rural collective construction land marketization — research design",
+      "tags": [
+        {
+          "type": "policy",
+          "label": "Policy"
+        },
+        {
+          "type": "land",
+          "label": "Land"
+        },
+        {
+          "type": "entrepreneurship",
+          "label": "Entrepreneurship"
+        }
+      ],
+      "abstract": "Due to the inability to legally transfer the usage rights of collective land, the enhancement of entrepreneurial vitality faces a land crisis that hinders reproduction and economic development. The Rural Collective Construction Land Marketization Reform (RCCLMR) may serve as an effective solution to this issue. This paper leverages the two-phased implementation of the RCCLMR since 2015 as a quasi-natural experiment. We apply a multi-period difference-in-differences approach to evaluate the impact of the reform on county-level entrepreneurial vitality and its underlying mechanisms by utilizing data from the registration information of industrial and commercial enterprises of China and the county-level panel dataset. This paper finds that the reform significantly boosts county-level entrepreneurial vitality in China. Heterogeneity analysis reveals that this positive effect diminishes with the intensification of population aging, while in regions with well-developed digital economies or lower fiscal pressure, the effect is more pronounced. Mechanism analysis shows that the reform enhances entrepreneurial vitality by increasing land supply, enhancing infrastructure, and increasing market demand. This paper contributes to the literature on entrepreneurial vitality, injects new momentum into the development of rural areas in China, and provides valuable references for optimizing land resource allocation and meshing together urban and rural development."
+    }
+  ]
+}

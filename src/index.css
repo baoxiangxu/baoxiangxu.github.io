@@ -1,0 +1,89 @@
+::-moz-selection {
+    background: #00bfbf;
+    color: #fafafa;
+    text-shadow: none;
+}
+::selection {
+    background: #00bfbf;
+    color: #fafafa;
+    text-shadow: none;
+}
+
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    transition: background-color 0.45s ease, color 0.45s ease;
+}
+
+/* Theme switching should ease, not snap. Limited to colour properties so it
+   never interferes with layout or transform animations. */
+a,
+p,
+span,
+li,
+button,
+aside,
+main,
+section,
+figure,
+h1, h2, h3, h4, h5, h6,
+[class*="MuiPaper"],
+[class*="MuiIconButton"] {
+    transition: background-color 0.45s ease, color 0.45s ease,
+        border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+p {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+/* Slim scrollbar: the page is long, so keep a position cue rather than
+   hiding the bar entirely. */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(128, 145, 165, 0.35);
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 145, 165, 0.6);
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(128, 145, 165, 0.35) transparent;
+}
+
+/* Keyboard users must be able to see where they are. */
+:focus-visible {
+    outline: 2px solid #00bfbf;
+    outline-offset: 2px;
+}
+
+img {
+    max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

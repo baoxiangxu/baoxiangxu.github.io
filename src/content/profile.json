@@ -1,0 +1,57 @@
+{
+  "name": "Baoxiang Xu",
+  "heroGreeting": "Hey, I'm",
+  "heroRole": "Econ student",
+  "heroPlace": "in the U.S.",
+  "sidebarLines": [
+    "M.S. Economics",
+    "Arizona State University"
+  ],
+  "mobileLine": "M.S. Economics · ASU",
+  "avatar": "avatar",
+  "location": {
+    "city": "Tempe",
+    "region": "Arizona",
+    "country": "the U.S.",
+    "countryCode": "US"
+  },
+  "seoKeywords": "Baoxiang Xu, economics, Arizona State University, ASU, microeconomic theory, information economics, market design, labor economics, land economics, research assistant, predoctoral",
+  "about": {
+    "heading": "About",
+    "paragraphs": [
+      "I am a Master's student in Economics at Arizona State University, with additional training in Computer Science.",
+      "Before joining ASU, I worked as a Research Assistant at Peking University and Nanyang Technological University, contributing to research projects on land economics, firm behavior, political preferences, and investment risk. My work relies heavily on large-scale administrative and survey data, and I have extensive experience in data cleaning, integration, and empirical analysis using Python, Stata, and GIS tools.",
+      "My graduate training at ASU has strengthened my interest in microeconomic theory, particularly information economics. I am currently seeking Research Assistant or predoctoral opportunities and would be very happy to collaborate if given the opportunity."
+    ]
+  },
+  "contacts": [
+    {
+      "network": "Email",
+      "username": "baoxiang@asu.edu",
+      "url": "mailto:baoxiang@asu.edu",
+      "icon": "fas fa-envelope"
+    },
+    {
+      "network": "LinkedIn",
+      "username": "Baoxiang Xu",
+      "url": "https://www.linkedin.com/in/baoxiang-xu-32442637b/",
+      "icon": "fab fa-linkedin-in"
+    },
+    {
+      "network": "GitHub",
+      "username": "baoxiangxu",
+      "url": "https://github.com/baoxiangxu",
+      "icon": "fab fa-github"
+    },
+    {
+      "network": "CV",
+      "username": "Curriculum Vitae (PDF)",
+      "url": "/files/resume.pdf",
+      "icon": "fas fa-file-lines"
+    }
+  ],
+  "cv": {
+    "label": "Curriculum Vitae",
+    "url": "/files/resume.pdf"
+  }
+}

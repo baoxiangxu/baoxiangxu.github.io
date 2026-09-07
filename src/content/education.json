@@ -1,0 +1,20 @@
+{
+  "heading": "Education",
+  "items": [
+    {
+      "institution": "Arizona State University",
+      "period": "2025 – present",
+      "degree": "M.S. Economics"
+    },
+    {
+      "institution": "Hunan University of Finance and Economics",
+      "period": "2019 – 2022",
+      "degree": "B.S. Computer Science (second major)"
+    },
+    {
+      "institution": "Hunan University of Finance and Economics",
+      "period": "2018 – 2022",
+      "degree": "B.A. International Economics and Trade (first major)"
+    }
+  ]
+}

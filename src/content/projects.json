@@ -1,0 +1,25 @@
+{
+  "heading": "Code & Projects",
+  "items": [
+    {
+      "id": "python-tutorial",
+      "title": "Python Learning Tutorial",
+      "blurb": "I wrote a comprehensive Python learning tutorial for beginners. Feel free to download and use it.",
+      "meta": "ZIP, ~1.1 MB",
+      "url": "/files/python_learning.zip",
+      "download": true,
+      "image": "python",
+      "imageAlt": "Python Learning Tutorial",
+      "tags": [
+        {
+          "type": "python",
+          "label": "Python"
+        },
+        {
+          "type": "tutorial",
+          "label": "Tutorial"
+        }
+      ]
+    }
+  ]
+}
