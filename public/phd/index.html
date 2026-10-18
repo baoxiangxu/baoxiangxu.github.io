@@ -41,7 +41,10 @@
 .pk-ex{font-size:13px;color:var(--muted)}
 .pk-ex .chip{margin:3px 4px 0 0}
 @media (max-width:640px){.pk-top .rk{margin-left:0;width:100%}.pk-facts{grid-template-columns:1fr}}
-@media print{header.top,.tray,.pk-tools,.pk-acts,footer.foot,.pk-banner button{display:none!important}.pk-card{break-inside:avoid}body{background:#fff}}
+.pk-docs{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:0 0 16px;background:var(--surface)}
+.pk-docs .pk-th{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}.pk-docs h3{margin:0;font-size:15px}.pk-docs #docAdd{margin-left:auto}
+.pk-dl{list-style:none;margin:8px 0 0;padding:0}.pk-dl li{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:6px 0;border-top:1px solid var(--line)}.pk-dl .pk-fn{font-weight:600;word-break:break-all}.pk-dl .pk-acts{margin-left:auto;display:flex;gap:6px}
+@media print{header.top,.tray,.pk-tools,.pk-acts,footer.foot,.pk-banner button,.pk-docs button{display:none!important}.pk-card{break-inside:avoid}body{background:#fff}}
 </style>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -855,7 +858,7 @@ html[lang="en"] .pkw{margin-left:.28em}
       <p class="note" style="margin:0 0 10px">美国 129 个经济学博士项目的申请要求、排名、师资、在读学生和毕业去向。<button class="btn" id="gateLang" type="button" data-noi18n style="margin-left:6px">${(window.I18N&&I18N.on)?'中文':'English'}</button></p>
       <div class="gate-opts">
         <div class="box"><b>游客浏览</b><p class="small muted" style="margin:6px 0 10px">看全部项目的数据，可以自己筛选、对比、标「不考虑」。你的操作只存在你自己的浏览器里。</p><button class="btn pri" id="gateGuest" type="button">${mode==='guest'?'继续游客浏览':'以游客身份进入'}</button></div>
-        <div class="box"><b>私人访问</b><p class="small muted" style="margin:6px 0 10px">输入密码，查看 ${who} 的选校清单：按档列出的一级、二级项目和每个学校的要点。</p>
+        <div class="box"><b>私人访问</b><p class="small muted" style="margin:6px 0 10px">输入密码，查看 ${who} 的选校清单（按档列出的一级、二级项目和每个学校的要点）和个人资料（简历、PS 等）。</p>
           <form id="gateForm" autocomplete="on"><input type="text" name="username" value="phd" autocomplete="username" hidden><input type="password" id="gatePw" class="inp" placeholder="密码" autocomplete="current-password" style="width:100%;box-sizing:border-box;margin:0 0 8px"><button class="btn pri" id="gateGo" type="submit">进入</button>${mode==='private'?' <button class="btn" id="gateOut" type="button">退出私人访问</button>':''}</form>
           <p class="xmsg" id="gateMsg"></p></div></div>
       ${first?'':'<div class="xrow" style="justify-content:flex-end"><button class="btn" id="gateClose" type="button">关闭</button></div>'}</div>`;
@@ -869,7 +872,7 @@ html[lang="en"] .pkw{margin-left:.28em}
     if(!rr){msg('密码不对','bad');return}
     snap=rr.o;keepKey(rr.bits,blob.salt,blob.iter);
     clearData();const d=snap.d||{};for(const k in d){if(k.startsWith('xzt.')&&!KEEP.has(k)&&k!=='xzt.view'&&!k.startsWith('xzt.__'))LS.setItem(k,d[k])}
-    set('view','pick');set('__mode','private');set('__privts',blob.t||snap.t||0);msg('已解锁，正在载入…','ok');setTimeout(()=>location.reload(),200)}
+    set('__files',Array.isArray(snap.f)?snap.f:[]);set('view','pick');set('__mode','private');set('__privts',blob.t||snap.t||0);msg('已解锁，正在载入…','ok');setTimeout(()=>location.reload(),200)}
   function guest(){const was=get('__mode');if(was==='private'){clearData();try{SES&&SES.removeItem('xzt_k')}catch(err){}set('__mode','guest');location.reload();return}set('__mode','guest');close()}
   document.addEventListener('submit',e=>{if(e.target&&e.target.id==='gateForm'){e.preventDefault();unlock()}});
   document.addEventListener('click',e=>{const id=e.target&&e.target.id;
@@ -881,8 +884,10 @@ html[lang="en"] .pkw{margin-left:.28em}
     b.textContent=get('__mode')==='private'?'🔒 私人访问':'游客';b.title='切换游客浏览／私人访问';lb.after(b)}
   async function checkUpd(){try{const b=await getBlob();const cur=get('__privts');if(b.t&&cur&&+b.t>+cur){const n=document.createElement('div');n.className='pk-banner';n.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:80;max-width:92vw;background:var(--surface)';n.innerHTML=`<span>选校清单有更新（${fmtT(b.t)}），重新输入密码查看最新版。</span><button class="btn pri" id="siteUpd" type="button">输入密码</button>`;document.body.appendChild(n)}}catch(e){}}
   /* 在网页上保存：私人访问时，用网站主人自己的 GitHub 钥匙，把现在的选择加密后写回仓库里的 private.json。
-     钥匙只存在这个浏览器（localStorage 的 xzt_gh），只发给 api.github.com。没有钥匙的人（比如老师）改动只留在自己浏览器里。 */
+     钥匙只存在这个浏览器（localStorage 的 xzt_gh），只发给 api.github.com。没有钥匙的人（比如老师）改动只留在自己浏览器里。
+     个人资料（简历、PS 等）：每个文件用随机密钥 AES-GCM 加密后存成 files/<id>.bin，文件名和密钥记在加密的 private.json 里（f 字段）。 */
   const REPO=C.repo||'baoxiangxu/baoxiangxu.github.io',FPATH=C.path||'public/phd/private.json',BR=C.branch||'main';
+  const FDIR=FPATH.replace(/[^/]*$/,'')+'files/';
   const ghTok=()=>{try{return LS.getItem('xzt_gh')||''}catch(e){return ''}};
   const SKIPK=new Set(['xzt.theme','xzt.lang','xzt.view']);
   function snapNow(){const d={},ks=[];for(let i=0;i<LS.length;i++){const k=LS.key(i);if(k&&k.startsWith('xzt.')&&!SKIPK.has(k)&&!k.startsWith('xzt.__'))ks.push(k)}ks.sort().forEach(k=>d[k]=LS.getItem(k));return d}
@@ -890,20 +895,41 @@ html[lang="en"] .pkw{margin-left:.28em}
   const summ=d=>{const c=jget(d,'xzt.cmp',[]),x=jget(d,'xzt.excl',[]),t=jget(d,'xzt.tiers',{})||{};return `我选的项目 ${c.length} 个 · 不考虑 ${x.length} 个${(t.rows||[]).length?` · 分档 ${t.rows.length} 档`:''}`};
   const DK=new Set(['cmp','excl','tiers','ltScore','ltTest','ltAdded','ltHome']);
   const isDirty=()=>!!get('__dirty');
+  const FILES=()=>{const f=get('__files');return Array.isArray(f)?f:[]};
+  const rerender=()=>{if(typeof window.renderPickNow==='function')window.renderPickNow()};
   function saveBtn(){const ch=document.getElementById('siteChip');let b=document.getElementById('siteSave');
     if(get('__mode')!=='private'){if(b)b.remove();return}
     if(!b&&ch){b=document.createElement('button');b.className='btn xferbtn';b.id='siteSave';b.type='button';b.title='把现在的选择保存到网站上，所有人都能看到';ch.after(b)}
     if(b){const dt=isDirty();b.textContent=dt?'保存到网站 •':'保存到网站';b.classList.toggle('pri',dt)}}
-  window.XSITE={dirty(k){if(get('__mode')!=='private'||!DK.has(k))return;if(!isDirty()){set('__dirty',1)}saveBtn()},save:()=>saveDlg()};
   window.addEventListener('beforeunload',e=>{if(get('__mode')==='private'&&isDirty()&&ghTok()){e.preventDefault();e.returnValue=''}});
-  const sm=(t,c)=>{const e=document.getElementById('svMsg');if(e){e.textContent=t;e.className='xmsg'+(c?' '+c:'')}};
-  function closeSave(){const g=document.getElementById('saveDlg');if(g)g.remove()}
-  const pwField=()=>`<input type="password" id="svPw" class="inp" placeholder="私人访问密码" autocomplete="current-password" style="width:100%;box-sizing:border-box;margin:8px 0 0">`;
-  function saveDlg(){closeSave();const tok=ghTok(),k=sesKey(),d=document.createElement('div');d.className='xfer';d.id='saveDlg';
-    d.innerHTML=`<div class="xfer-in" role="dialog" aria-modal="true" aria-labelledby="svT"><h3 id="svT">保存到网站</h3>
-      <p class="note" style="margin:0 0 8px">把这里现在的选择（${summ(snapNow())}）加密后存到网站上。保存后 1–2 分钟，所有用密码打开的人都会看到新清单。</p>
-      <form id="svForm" autocomplete="off">
-      ${tok?`<p class="small muted" style="margin:0">这个浏览器里已经存了你的 GitHub 钥匙。<button class="linkbtn" id="svForget" type="button">删掉钥匙</button></p>`:`<div class="box"><b>第一次保存：粘贴你的 GitHub 钥匙</b>
+
+  /* —— GitHub：读出网站上现在的 private.json 并解开（用标签页里记住的密钥，或密码） —— */
+  const ghBad=st=>st===401?'钥匙不对或已经过期，请重新生成一个':(st===403||st===404)?`这个钥匙没有 ${REPO} 的写入权限：生成时要选这个仓库，并给 Contents 读写权限`:'';
+  const ghH=tok=>({Authorization:'Bearer '+tok,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'});
+  const ghURL=p=>`https://api.github.com/repos/${REPO}/contents/${p.split('/').map(encodeURIComponent).join('/')}`;
+  async function ghOpen(tok,pw,status){
+    const H=ghH(tok);status('正在读取网站上的清单…');
+    let r;try{r=await fetch(ghURL(FPATH)+'?ref='+encodeURIComponent(BR),{headers:H,cache:'no-store'})}catch(e){return {err:'连不上 GitHub，检查一下网络'}}
+    if(!r.ok)return {err:ghBad(r.status)||`读取失败（${r.status}）`,st:r.status};
+    const j=await r.json();let raw=j.content?new TextDecoder().decode(unb64(j.content.replace(/\s/g,''))):'';
+    if(!raw&&j.download_url)raw=await (await fetch(j.download_url,{cache:'no-store'})).text();
+    const cur=JSON.parse(raw);let bits=null,obj=null;const sk=sesKey();
+    if(sk&&sk.salt===cur.salt){bits=unb64(sk.k);obj=await openWith(cur,bits);if(!obj)bits=null}
+    if(!bits){if(!pw)return {needPw:true,err:'请输入私人访问密码'};
+      status('正在核对密码…');const rr=await xztDecrypt(cur,pw);if(!rr)return {err:'密码不对（要和网站上现在用的密码一样）'};bits=rr.bits;obj=rr.o}
+    return {H,cur,sha:j.sha,bits,obj}}
+  async function ghPut(ctx,path,b64,sha,message){
+    const body={message,content:b64,branch:BR};if(sha)body.sha=sha;
+    try{return await fetch(ghURL(path),{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ctx.H),body:JSON.stringify(body)})}catch(e){return {ok:false,status:0}}}
+  async function ghPutPrivate(ctx,obj,message){const t=obj.t,blob=await seal(obj,ctx.bits,unb64(ctx.cur.salt),ctx.cur.iter,t);
+    const r=await ghPut(ctx,FPATH,B64(te.encode(JSON.stringify(blob))),ctx.sha,message);
+    if(r.ok){keepKey(ctx.bits,ctx.cur.salt,ctx.cur.iter);set('__privts',t);BLOB=blob}
+    return r}
+  const putErr=r=>r.status===0?'连不上 GitHub，检查一下网络':(r.status===409||r.status===422)?'网站上的文件刚刚被改过，请再试一次':(ghBad(r.status)||`保存失败（${r.status}）`);
+  const stamp=()=>new Date().toISOString().slice(0,16).replace('T',' ')+' UTC';
+
+  /* —— 弹窗里共用的「钥匙」「密码」输入 —— */
+  const tokBox=()=>`<div class="box"><b>第一次用：粘贴你的 GitHub 钥匙</b>
         <ol class="small" style="margin:6px 0 8px;padding-left:20px;line-height:1.6">
         <li>打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub 生成钥匙的页面</a>，要先登录 GitHub</li>
         <li>名字随便写，比如 phd-site；有效期选一个你能接受的</li>
@@ -911,54 +937,109 @@ html[lang="en"] .pkw{margin-left:.28em}
         <li>Permissions 里加上 Contents，权限选 Read and write</li>
         <li>点 Generate token，复制 github_pat_ 开头的那一串，粘到下面</li></ol>
         <input type="password" id="svTok" class="inp" placeholder="github_pat_…" autocomplete="off" spellcheck="false" style="width:100%;box-sizing:border-box">
-        <p class="small muted" style="margin:6px 0 0">钥匙只存在这个浏览器里，只能改这一个网站仓库。没有钥匙的人（比如老师）保存不了，改动只留在他们自己的浏览器里。</p></div>`}
+        <p class="small muted" style="margin:6px 0 0">钥匙只存在这个浏览器里，只能改这一个网站仓库。没有钥匙的人（比如老师）保存不了，改动只留在他们自己的浏览器里。</p></div>`;
+  const tokHave=()=>`<p class="small muted" style="margin:0">这个浏览器里已经存了你的 GitHub 钥匙。<button class="linkbtn" id="svForget" type="button">删掉钥匙</button></p>`;
+  const pwField=()=>`<input type="password" id="svPw" class="inp" placeholder="私人访问密码" autocomplete="current-password" style="width:100%;box-sizing:border-box;margin:8px 0 0">`;
+  const sm=(t,c)=>{const e=document.getElementById('svMsg');if(e){e.textContent=t;e.className='xmsg'+(c?' '+c:'')}};
+  function closeSave(){const g=document.getElementById('saveDlg');if(g)g.remove()}
+  /* kind: save（保存清单）| add（添加资料）| del（删除资料） */
+  let DLG={kind:'save'};
+  function dlg(kind,extra){closeSave();DLG=Object.assign({kind},extra||{});const tok=ghTok(),k=sesKey(),d=document.createElement('div');d.className='xfer';d.id='saveDlg';
+    const f=kind==='del'?FILES().find(x=>x.id===DLG.id):null;
+    const title=kind==='save'?'保存到网站':kind==='add'?'添加个人资料':'删除个人资料';
+    const intro=kind==='save'?`<p class="note" style="margin:0 0 8px">把这里现在的选择（${summ(snapNow())}）加密后存到网站上。保存后 1–2 分钟，所有用密码打开的人都会看到新清单。</p>`
+      :kind==='add'?`<p class="note" style="margin:0 0 8px">选你的简历、PS 等文件（每个最大 25 MB）。文件会在你的浏览器里加密后再上传，只有输入密码的人能下载。</p>
+        <input type="file" id="docFile" multiple style="margin:0 0 10px;max-width:100%">`
+      :`<p class="note" style="margin:0 0 8px">从网站上删掉 <b data-noi18n>${esc0(f?f.name:'')}</b>？删掉后用密码打开的人也下载不到了。</p>`;
+    d.innerHTML=`<div class="xfer-in" role="dialog" aria-modal="true" aria-labelledby="svT"><h3 id="svT">${title}</h3>${intro}
+      <form id="svForm" autocomplete="off">${tok?tokHave():tokBox()}
       <div id="svPwBox">${k?'':pwField()}</div>
       <p class="xmsg" id="svMsg"></p>
-      <div class="xrow" style="justify-content:flex-end"><button class="btn" id="svCancel" type="button">关闭</button><button class="btn pri" id="svGo" type="submit">保存</button></div></form></div>`;
-    document.body.appendChild(d);setTimeout(()=>{const f=document.getElementById(tok?(k?'svGo':'svPw'):'svTok');if(f)f.focus()},50)}
-  let SAVING=false;
-  async function doSave(){if(SAVING)return;const go=document.getElementById('svGo'),force=go&&go.dataset.force==='1';
+      <div class="xrow" style="justify-content:flex-end"><button class="btn" id="svCancel" type="button">关闭</button><button class="btn pri" id="svGo" type="submit">${kind==='save'?'保存':kind==='add'?'上传':'删除'}</button></div></form></div>`;
+    document.body.appendChild(d);setTimeout(()=>{const x=document.getElementById(kind==='add'?'docFile':tok?(k?'svGo':'svPw'):'svTok');if(x)x.focus()},50)}
+  const esc0=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const saveDlg=()=>dlg('save');
+  window.XSITE={dirty(k){if(get('__mode')!=='private'||!DK.has(k))return;if(!isDirty()){set('__dirty',1)}saveBtn()},save:()=>saveDlg(),docsHtml:()=>docsHtml()};
+
+  let BUSY=false;
+  async function run(){if(BUSY)return;const go=document.getElementById('svGo'),force=go&&go.dataset.force==='1';
     const tokIn=document.getElementById('svTok'),pwIn=document.getElementById('svPw');
     const tok=ghTok()||(tokIn?tokIn.value.trim():'');
     if(!tok){sm('先粘贴 GitHub 钥匙','bad');return}
     if(!(window.crypto&&crypto.subtle)){sm('这个浏览器不支持加密，请换用新版 Chrome、Safari 或 Edge','bad');return}
-    SAVING=true;if(go)go.disabled=true;
+    let picked=[];
+    if(DLG.kind==='add'){const fi=document.getElementById('docFile');picked=fi?[...fi.files]:[];if(!picked.length){sm('先选要上传的文件','bad');return}
+      const big=picked.find(x=>x.size>25*1024*1024);if(big){sm(`有文件超过 25 MB，传不了：${big.name}`,'bad');return}}
+    BUSY=true;if(go)go.disabled=true;
     try{
-      const H={Authorization:'Bearer '+tok,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-      const api=`https://api.github.com/repos/${REPO}/contents/${FPATH}`;
-      const bad=st=>st===401?'钥匙不对或已经过期，请重新生成一个':(st===403||st===404)?`这个钥匙没有 ${REPO} 的写入权限：生成时要选这个仓库，并给 Contents 读写权限`:'';
-      sm('正在读取网站上的清单…');
-      let r;try{r=await fetch(api+'?ref='+encodeURIComponent(BR),{headers:H,cache:'no-store'})}catch(e){sm('连不上 GitHub，检查一下网络','bad');return}
-      if(!r.ok){sm(bad(r.status)||`读取失败（${r.status}）`,'bad');if(r.status===401&&!tokIn){try{LS.removeItem('xzt_gh')}catch(e){}}return}
-      const j=await r.json();let raw=j.content?new TextDecoder().decode(unb64(j.content.replace(/\s/g,''))):'';
-      if(!raw&&j.download_url){raw=await (await fetch(j.download_url,{cache:'no-store'})).text()}
-      const cur=JSON.parse(raw);
-      let bits=null;const sk=sesKey();
-      if(sk&&sk.salt===cur.salt){bits=unb64(sk.k);if(!await openWith(cur,bits))bits=null}
-      if(!bits){if(!pwIn){document.getElementById('svPwBox').innerHTML=pwField();sm('请输入私人访问密码','bad');const p=document.getElementById('svPw');if(p)p.focus();return}
-        if(!pwIn.value){sm('请输入私人访问密码','bad');return}
-        sm('正在核对密码…');const rr=await xztDecrypt(cur,pwIn.value);if(!rr){sm('密码不对（要和网站上现在用的密码一样）','bad');return}
-        bits=rr.bits}
-      const mine=+get('__privts')||0;
-      if(!force&&cur.t&&+cur.t>mine){sm(`网站上的清单在 ${fmtT(cur.t)} 保存过，比你这里载入的版本新（可能是在别的电脑上改的）。再点「仍然保存」会用这里的版本覆盖它。`,'bad');if(go){go.textContent='仍然保存';go.dataset.force='1'}return}
-      sm('正在加密并保存…');
-      const t=Date.now(),blob=await seal({t,d:snapNow()},bits,unb64(cur.salt),cur.iter,t);
-      const body={message:'Update Econ PhD picks from the web ('+new Date(t).toISOString().slice(0,16).replace('T',' ')+' UTC)',content:B64(te.encode(JSON.stringify(blob))),sha:j.sha,branch:BR};
-      try{r=await fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify(body)})}catch(e){sm('连不上 GitHub，检查一下网络','bad');return}
-      if(r.status===409||r.status===422){sm('网站上的文件刚刚被改过，请再点一次「保存」','bad');return}
-      if(!r.ok){sm(bad(r.status)||`保存失败（${r.status}）`,'bad');return}
-      if(tokIn){try{LS.setItem('xzt_gh',tok)}catch(e){}}
-      keepKey(bits,cur.salt,cur.iter);set('__privts',t);try{LS.removeItem('xzt.__dirty')}catch(e){}BLOB=blob;saveBtn();
-      if(typeof window.renderPickNow==='function')window.renderPickNow();
-      sm('✓ 已保存。GitHub 正在重新生成网站，1–2 分钟后所有人都能看到新清单。','ok');
-      if(go){go.textContent='保存';go.dataset.force=''}
-      const tb=document.querySelector('#saveDlg .box');if(tb)tb.remove();
+      const ctx=await ghOpen(tok,pwIn?pwIn.value:'',t=>sm(t));
+      if(ctx.err){if(ctx.needPw&&!pwIn){document.getElementById('svPwBox').innerHTML=pwField();const p=document.getElementById('svPw');if(p)p.focus()}
+        sm(ctx.err,'bad');if(ctx.st===401&&!tokIn){try{LS.removeItem('xzt_gh')}catch(e){}}return}
+      const remember=()=>{if(tokIn){try{LS.setItem('xzt_gh',tok)}catch(e){}}const tb=document.querySelector('#saveDlg .box');if(tb)tb.remove()};
+      const files=Array.isArray(ctx.obj.f)?ctx.obj.f.slice():[];
+      if(DLG.kind==='save'){
+        const mine=+get('__privts')||0;
+        if(!force&&ctx.cur.t&&+ctx.cur.t>mine){sm(`网站上的清单在 ${fmtT(ctx.cur.t)} 保存过，比你这里载入的版本新（可能是在别的电脑上改的）。再点「仍然保存」会用这里的版本覆盖它。`,'bad');if(go){go.textContent='仍然保存';go.dataset.force='1'}return}
+        sm('正在加密并保存…');
+        const r=await ghPutPrivate(ctx,{t:Date.now(),d:snapNow(),f:files},'Update Econ PhD picks from the web ('+stamp()+')');
+        if(!r.ok){sm(putErr(r),'bad');return}
+        remember();set('__files',files);try{LS.removeItem('xzt.__dirty')}catch(e){}saveBtn();rerender();
+        sm('✓ 已保存。GitHub 正在重新生成网站，1–2 分钟后所有人都能看到新清单。','ok');if(go){go.textContent='保存';go.dataset.force=''}
+      }else if(DLG.kind==='add'){
+        let n=0;
+        for(const fl of picked){n++;sm(`正在加密并上传 ${n}/${picked.length}：${fl.name}…`);
+          const key=crypto.getRandomValues(new Uint8Array(32)),iv=crypto.getRandomValues(new Uint8Array(12));
+          const ak=await S().importKey('raw',key,'AES-GCM',false,['encrypt']);
+          const ct=new Uint8Array(await S().encrypt({name:'AES-GCM',iv},ak,await fl.arrayBuffer()));
+          const out=new Uint8Array(5+12+ct.length);out.set(te.encode('XZTF1'),0);out.set(iv,5);out.set(ct,17);
+          const id=[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');
+          const r=await ghPut(ctx,FDIR+id+'.bin',B64(out),null,'Add encrypted file ('+stamp()+')');
+          if(!r.ok){sm(putErr(r),'bad');return}
+          files.push({id,name:fl.name,size:fl.size,type:fl.type||'',t:Date.now(),k:B64(key)})}
+        sm('正在更新资料列表…');
+        const r=await ghPutPrivate(ctx,{t:Date.now(),d:ctx.obj.d||{},f:files},'Update file list ('+stamp()+')');
+        if(!r.ok){sm(putErr(r),'bad');return}
+        remember();set('__files',files);rerender();const fi=document.getElementById('docFile');if(fi)fi.value='';
+        sm(`✓ 已上传 ${picked.length} 个文件。网站 1–2 分钟后更新，之后用密码打开的人都能下载。`,'ok');
+      }else{
+        const f=files.find(x=>x.id===DLG.id);
+        if(f){sm('正在删除…');const p=FDIR+f.id+'.bin';
+          try{const g=await fetch(ghURL(p)+'?ref='+encodeURIComponent(BR),{headers:ctx.H,cache:'no-store'});
+            if(g.ok){const gj=await g.json();const r=await fetch(ghURL(p),{method:'DELETE',headers:Object.assign({'Content-Type':'application/json'},ctx.H),body:JSON.stringify({message:'Delete encrypted file ('+stamp()+')',sha:gj.sha,branch:BR})});if(!r.ok&&r.status!==404){sm(putErr(r),'bad');return}}}
+          catch(e){sm('连不上 GitHub，检查一下网络','bad');return}}
+        const keep=files.filter(x=>x.id!==DLG.id);
+        const r=await ghPutPrivate(ctx,{t:Date.now(),d:ctx.obj.d||{},f:keep},'Update file list ('+stamp()+')');
+        if(!r.ok){sm(putErr(r),'bad');return}
+        remember();set('__files',keep);rerender();sm('✓ 已删除','ok');if(go)go.remove()}
     }catch(e){sm('出错了：'+(e.message||e),'bad')}
-    finally{SAVING=false;if(go)go.disabled=false}}
-  document.addEventListener('submit',e=>{if(e.target&&e.target.id==='svForm'){e.preventDefault();doSave()}});
-  document.addEventListener('click',e=>{const id=e.target&&e.target.id;
+    finally{BUSY=false;if(go)go.disabled=false}}
+
+  /* —— 「我的清单」里的个人资料区 —— */
+  const fmtSize=n=>n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+  function docsHtml(){if(get('__mode')!=='private')return '';const fs=FILES(),own=!!ghTok();
+    if(!fs.length&&!own)return '';
+    return `<section class="pk-docs"><div class="pk-th"><h3>个人资料</h3><span class="small muted">${fs.length?`${fs.length} 个文件 · 只有输入密码的人能下载`:'还没有上传资料'}</span>${own?'<button class="btn" id="docAdd" type="button">＋ 添加资料</button>':''}</div>
+      ${fs.length?`<ul class="pk-dl">${fs.map(f=>`<li><span class="pk-fn">📄 <span data-noi18n>${esc0(f.name)}</span></span><span class="small muted">${fmtSize(f.size)} · ${esc0(new Date(f.t).toLocaleDateString())}</span><span class="pk-acts"><button class="btn" data-docdl="${esc0(f.id)}" type="button">下载</button>${own?`<button class="btn" data-docrm="${esc0(f.id)}" type="button">删除</button>`:''}</span></li>`).join('')}</ul>`:''}</section>`}
+  async function download(id,btn){const f=FILES().find(x=>x.id===id);if(!f)return;const old=btn.textContent;btn.disabled=true;btn.textContent='下载中…';
+    try{let buf=null;
+      for(const u of ['files/'+id+'.bin?v='+f.t,`https://raw.githubusercontent.com/${REPO}/${BR}/${FDIR}${id}.bin?v=${f.t}`]){try{const r=await fetch(u,{cache:'no-store'});if(r.ok){buf=new Uint8Array(await r.arrayBuffer());break}}catch(e){}}
+      if(!buf)throw new Error('文件还没生成好，过 1–2 分钟再试');
+      if(new TextDecoder().decode(buf.slice(0,5))!=='XZTF1')throw new Error('文件格式不对');
+      const ak=await S().importKey('raw',unb64(f.k),'AES-GCM',false,['decrypt']);
+      const pt=await S().decrypt({name:'AES-GCM',iv:buf.slice(5,17)},ak,buf.slice(17));
+      const url=URL.createObjectURL(new Blob([pt],{type:f.type||'application/octet-stream'}));
+      const a=document.createElement('a');a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+      btn.textContent=old}
+    catch(e){btn.textContent=old;alertBox(e.message||String(e))}
+    finally{btn.disabled=false}}
+  function alertBox(t){const n=document.createElement('div');n.className='pk-banner';n.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:80;max-width:92vw;background:var(--surface)';n.innerHTML=`<span>下载失败：${esc0(t)}</span>`;document.body.appendChild(n);setTimeout(()=>n.remove(),6000)}
+
+  document.addEventListener('submit',e=>{if(e.target&&e.target.id==='svForm'){e.preventDefault();run()}});
+  document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;const id=t.id;
     if(id==='siteSave')saveDlg();else if(id==='svCancel')closeSave();
-    else if(id==='svForget'){try{LS.removeItem('xzt_gh')}catch(err){}saveDlg();sm('已经从这个浏览器删掉了钥匙','ok')}});
+    else if(id==='svForget'){try{LS.removeItem('xzt_gh')}catch(err){}dlg(DLG.kind,DLG);sm('已经从这个浏览器删掉了钥匙','ok');rerender()}
+    else if(id==='docAdd')dlg('add');
+    else{const b=t.closest('[data-docdl],[data-docrm]');if(!b)return;if(b.dataset.docdl)download(b.dataset.docdl,b);else dlg('del',{id:b.dataset.docrm})}});
   const boot=()=>{chip();saveBtn();const m=get('__mode');if(!m)gate(true);else if(m==='private')checkUpd()};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
@@ -3306,10 +3387,11 @@ function renderPick(){const el=$('#view-pick');if(!el)return;
   let ban='';
   if(S0&&mode==='private'){const t=store.get('__privts',0);const dt=!!store.get('__dirty',0);ban=`<div class="pk-banner"><span>🔒 私人访问 · 这份选校清单保存于 <b>${t?esc(new Date(+t).toLocaleString()):'—'}</b>。${dt?'<b>这里有还没保存的改动。</b>':''}在网页上做的改动先存在这个浏览器里；点「保存到网站」后，所有人才会看到（需要网站主人的 GitHub 钥匙）。</span><button class="btn${dt?' pri':''}" id="pkSave">保存到网站</button><button class="btn" id="pkGate">重新输入密码／退出</button></div>`}
   else if(S0){ban=`<div class="pk-banner"><span>这是游客浏览：清单是空的，你可以在「择校」页点「加入对比」挑自己的项目。要看申请人的选校清单，请用私人访问（需要密码）。</span><button class="btn" id="pkGate">私人访问</button></div>`}
-  if(!sel.length){el.innerHTML=`${ban}<div class="pk-head"><h2>我的选校清单</h2></div><p class="note">还没有选项目。在「择校」页点项目右边的「加入对比」，或者在「自选对比」页搜索加入。</p>`;return}
+  const docs=S0&&window.XSITE?window.XSITE.docsHtml():'';
+  if(!sel.length){el.innerHTML=`${ban}<div class="pk-head"><h2>我的选校清单</h2></div>${docs}<p class="note">还没有选项目。在「择校」页点项目右边的「加入对比」，或者在「自选对比」页搜索加入。</p>`;return}
   const T=TIER.rows,st=T.length?tierStat():null,u=tierU();
   let h=`${ban}<div class="pk-head"><div><h2>我的选校清单</h2><div class="small muted">${sel.length} 个项目 · ${nSch(sel)} 所学校${T.length?` · 按 ${esc(tierM().l)} 分档，按${TIER.unit==='school'?'学校':'项目'}计数；每档先选满计划数的是一级，之后加的是二级（备选）`:''}</div></div>
-    <div class="pk-tools"><button class="btn" id="pkPrint">打印／存成 PDF</button><button class="btn" id="pkTbl">在自选对比里看</button></div></div>`;
+    <div class="pk-tools"><button class="btn" id="pkPrint">打印／存成 PDF</button><button class="btn" id="pkTbl">在自选对比里看</button></div></div>${docs}`;
   if(st){T.forEach((t,i)=>{const L1=st.l1[i],L2=st.l2[i],k=tierK(L1),z=tierState(k,t.n);
       h+=`<section class="pk-tier"><div class="pk-th"><h3>第 ${i+1} 档 · ${esc(tierName(t))}</h3><span class="small muted">计划 ${t.n} ${u}</span><span class="pk-st ${z}">${z==='done'?'✓ 选完了':z==='under'?`还差 ${t.n-k} ${u}`:`多了 ${k-t.n} ${u}`}</span><span class="small muted">一级 ${L1.length} 个项目${L2.length?` · 二级 ${L2.length} 个`:''}</span></div>`;
       h+=L1.length?L1.map(x=>pickCard(x,1)).join(''):`<p class="small muted">这一档还没选。</p>`;
