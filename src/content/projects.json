@@ -2,6 +2,26 @@
   "heading": "Code & Projects",
   "items": [
     {
+      "id": "econ-phd-finder",
+      "title": "Econ PhD Program Finder",
+      "blurb": "An interactive guide I built for choosing US Economics PhD programs: application requirements, deadlines, funding, rankings, faculty, current students and placements for 129 programs, with tiered school selection, a map and Excel export. Chinese / English.",
+      "meta": "Web app · 中文 / English · guest browsing or password access",
+      "url": "https://baoxiangxu.github.io/phd/",
+      "download": false,
+      "image": "phd",
+      "imageAlt": "Map of US Economics PhD programs in the Econ PhD Program Finder",
+      "tags": [
+        {
+          "type": "data",
+          "label": "Data"
+        },
+        {
+          "type": "education",
+          "label": "PhD Applications"
+        }
+      ]
+    },
+    {
       "id": "python-tutorial",
       "title": "Python Learning Tutorial",
       "blurb": "I wrote a comprehensive Python learning tutorial for beginners. Feel free to download and use it.",

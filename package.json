@@ -41,7 +41,8 @@
     },
     "reactSnapshot": {
         "exclude": [
-            "/resume"
+            "/resume",
+            "/phd"
         ],
         "snapshotDelay": 1000
     },
