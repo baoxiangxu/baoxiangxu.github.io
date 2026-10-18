@@ -948,15 +948,19 @@ html[lang="en"] .pkw{margin-left:.28em}
     const f=kind==='del'?FILES().find(x=>x.id===DLG.id):null;
     const title=kind==='save'?'保存到网站':kind==='add'?'添加个人资料':'删除个人资料';
     const intro=kind==='save'?`<p class="note" style="margin:0 0 8px">把这里现在的选择（${summ(snapNow())}）加密后存到网站上。保存后 1–2 分钟，所有用密码打开的人都会看到新清单。</p>`
-      :kind==='add'?`<p class="note" style="margin:0 0 8px">选你的简历、PS 等文件（每个最大 25 MB）。文件会在你的浏览器里加密后再上传，只有输入密码的人能下载。</p>
-        <input type="file" id="docFile" multiple style="margin:0 0 10px;max-width:100%">`
-      :`<p class="note" style="margin:0 0 8px">从网站上删掉 <b data-noi18n>${esc0(f?f.name:'')}</b>？删掉后用密码打开的人也下载不到了。</p>`;
+      :kind==='add'?`<p class="note" style="margin:0 0 10px">先写标题，再选文件（最大 25 MB）。文件会在你的浏览器里加密后再上传，只有输入密码的人能下载。</p>
+        <label class="small" for="docTitle" style="display:block;margin:0 0 4px;font-weight:600">标题</label>
+        <input type="text" id="docTitle" class="inp" placeholder="比如 CV、Personal Statement、成绩单" autocomplete="off" style="width:100%;box-sizing:border-box;margin:0 0 10px">
+        <label class="small" style="display:block;margin:0 0 4px;font-weight:600">文件</label>
+        <div class="xrow" style="margin:0 0 12px"><label class="btn" for="docFile" style="cursor:pointer">选择文件</label><span id="docFileName" class="small muted">还没选文件</span>
+        <input type="file" id="docFile" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"></div>`
+      :`<p class="note" style="margin:0 0 8px">从网站上删掉 <b data-noi18n>${esc0(f?(f.title||f.name):'')}</b>？删掉后用密码打开的人也下载不到了。</p>`;
     d.innerHTML=`<div class="xfer-in" role="dialog" aria-modal="true" aria-labelledby="svT"><h3 id="svT">${title}</h3>${intro}
       <form id="svForm" autocomplete="off">${tok?tokHave():tokBox()}
       <div id="svPwBox">${k?'':pwField()}</div>
       <p class="xmsg" id="svMsg"></p>
       <div class="xrow" style="justify-content:flex-end"><button class="btn" id="svCancel" type="button">关闭</button><button class="btn pri" id="svGo" type="submit">${kind==='save'?'保存':kind==='add'?'上传':'删除'}</button></div></form></div>`;
-    document.body.appendChild(d);setTimeout(()=>{const x=document.getElementById(kind==='add'?'docFile':tok?(k?'svGo':'svPw'):'svTok');if(x)x.focus()},50)}
+    document.body.appendChild(d);setTimeout(()=>{const x=document.getElementById(kind==='add'?'docTitle':tok?(k?'svGo':'svPw'):'svTok');if(x)x.focus()},50)}
   const esc0=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const saveDlg=()=>dlg('save');
   window.XSITE={dirty(k){if(get('__mode')!=='private'||!DK.has(k))return;if(!isDirty()){set('__dirty',1)}saveBtn()},save:()=>saveDlg(),docsHtml:()=>docsHtml()};
@@ -968,7 +972,11 @@ html[lang="en"] .pkw{margin-left:.28em}
     if(!tok){sm('先粘贴 GitHub 钥匙','bad');return}
     if(!(window.crypto&&crypto.subtle)){sm('这个浏览器不支持加密，请换用新版 Chrome、Safari 或 Edge','bad');return}
     let picked=[];
-    if(DLG.kind==='add'){const fi=document.getElementById('docFile');picked=fi?[...fi.files]:[];if(!picked.length){sm('先选要上传的文件','bad');return}
+    let docTitle='';
+    if(DLG.kind==='add'){const fi=document.getElementById('docFile');picked=fi?[...fi.files].slice(0,1):[];
+      docTitle=((document.getElementById('docTitle')||{}).value||'').trim();
+      if(!docTitle){sm('先写标题，比如 CV','bad');const x=document.getElementById('docTitle');if(x)x.focus();return}
+      if(!picked.length){sm('先选要上传的文件','bad');return}
       const big=picked.find(x=>x.size>25*1024*1024);if(big){sm(`有文件超过 25 MB，传不了：${big.name}`,'bad');return}}
     BUSY=true;if(go)go.disabled=true;
     try{
@@ -995,12 +1003,13 @@ html[lang="en"] .pkw{margin-left:.28em}
           const id=[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');
           const r=await ghPut(ctx,FDIR+id+'.bin',B64(out),null,'Add encrypted file ('+stamp()+')');
           if(!r.ok){sm(putErr(r),'bad');return}
-          files.push({id,name:fl.name,size:fl.size,type:fl.type||'',t:Date.now(),k:B64(key)})}
+          files.push({id,title:docTitle,name:fl.name,size:fl.size,type:fl.type||'',t:Date.now(),k:B64(key)})}
         sm('正在更新资料列表…');
         const r=await ghPutPrivate(ctx,{t:Date.now(),d:ctx.obj.d||{},f:files},'Update file list ('+stamp()+')');
         if(!r.ok){sm(putErr(r),'bad');return}
         remember();set('__files',files);rerender();const fi=document.getElementById('docFile');if(fi)fi.value='';
-        sm(`✓ 已上传 ${picked.length} 个文件。网站 1–2 分钟后更新，之后用密码打开的人都能下载。`,'ok');
+        const dt=document.getElementById('docTitle');if(dt)dt.value='';const fn=document.getElementById('docFileName');if(fn){fn.removeAttribute('data-noi18n');fn.textContent='还没选文件'}
+        sm(`✓ 已上传「${docTitle}」。网站 1–2 分钟后更新，之后用密码打开的人都能下载。可以接着传下一个。`,'ok');
       }else{
         const f=files.find(x=>x.id===DLG.id);
         if(f){sm('正在删除…');const p=FDIR+f.id+'.bin';
@@ -1019,7 +1028,7 @@ html[lang="en"] .pkw{margin-left:.28em}
   function docsHtml(){if(get('__mode')!=='private')return '';const fs=FILES(),own=!!ghTok();
     if(!fs.length&&!own)return '';
     return `<section class="pk-docs"><div class="pk-th"><h3>个人资料</h3><span class="small muted">${fs.length?`${fs.length} 个文件 · 只有输入密码的人能下载`:'还没有上传资料'}</span>${own?'<button class="btn" id="docAdd" type="button">＋ 添加资料</button>':''}</div>
-      ${fs.length?`<ul class="pk-dl">${fs.map(f=>`<li><span class="pk-fn">📄 <span data-noi18n>${esc0(f.name)}</span></span><span class="small muted">${fmtSize(f.size)} · ${esc0(new Date(f.t).toLocaleDateString())}</span><span class="pk-acts"><button class="btn" data-docdl="${esc0(f.id)}" type="button">下载</button>${own?`<button class="btn" data-docrm="${esc0(f.id)}" type="button">删除</button>`:''}</span></li>`).join('')}</ul>`:''}</section>`}
+      ${fs.length?`<ul class="pk-dl">${fs.map(f=>`<li><span class="pk-fn">📄 <span data-noi18n>${esc0(f.title||f.name)}</span></span>${f.title?`<span class="small muted" data-noi18n>${esc0(f.name)}</span>`:''}<span class="small muted">${fmtSize(f.size)} · ${esc0(new Date(f.t).toLocaleDateString())}</span><span class="pk-acts"><button class="btn" data-docdl="${esc0(f.id)}" type="button">下载</button>${own?`<button class="btn" data-docrm="${esc0(f.id)}" type="button">删除</button>`:''}</span></li>`).join('')}</ul>`:''}</section>`}
   async function download(id,btn){const f=FILES().find(x=>x.id===id);if(!f)return;const old=btn.textContent;btn.disabled=true;btn.textContent='下载中…';
     try{let buf=null;
       for(const u of ['files/'+id+'.bin?v='+f.t,`https://raw.githubusercontent.com/${REPO}/${BR}/${FDIR}${id}.bin?v=${f.t}`]){try{const r=await fetch(u,{cache:'no-store'});if(r.ok){buf=new Uint8Array(await r.arrayBuffer());break}}catch(e){}}
@@ -1034,6 +1043,7 @@ html[lang="en"] .pkw{margin-left:.28em}
     finally{btn.disabled=false}}
   function alertBox(t){const n=document.createElement('div');n.className='pk-banner';n.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:80;max-width:92vw;background:var(--surface)';n.innerHTML=`<span>下载失败：${esc0(t)}</span>`;document.body.appendChild(n);setTimeout(()=>n.remove(),6000)}
 
+  document.addEventListener('change',e=>{if(e.target&&e.target.id==='docFile'){const f=e.target.files&&e.target.files[0],n=document.getElementById('docFileName');if(n){n.textContent=f?`${f.name}（${fmtSize(f.size)}）`:'还没选文件';if(f)n.setAttribute('data-noi18n','');else n.removeAttribute('data-noi18n')}}});
   document.addEventListener('submit',e=>{if(e.target&&e.target.id==='svForm'){e.preventDefault();run()}});
   document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;const id=t.id;
     if(id==='siteSave')saveDlg();else if(id==='svCancel')closeSave();
