@@ -2995,8 +2995,16 @@ function facetsOf(v,x){
   {const BRK=new Set(['gre','rec','ws','sop','cv']);
    if(BRK.has(v.id)){const st=(/^(要交|不要|可选|官网未写|Required|Not required|Optional|Not stated)/i.exec(d)||[])[1];if(st)add('要不要交',st)}
    if(v.id==='gpa'){const G=GPAS[x.seq]||{};add('本科／硕士',G.ug_min||G.ug_adm?(G.gr_min||G.gr_adm?'本科、硕士分开写了':'只写了本科'):G.gr_min||G.gr_adm?'只写了硕士／研究生':(G.min_any&&G.min_any!=='官网未写')||G.adm_any?'没区分本科／硕士':'都没写');
-     add('最低要求',/不设|无硬线|No minimum/i.test(G.min_any||'')&&!G.ug_min&&!G.gr_min?'不设最低':(G.ug_min||G.gr_min||(G.min_any&&G.min_any!=='官网未写'))?'写了最低要求':'没写');
-     add('录取者 GPA',G.ug_adm||G.gr_adm||G.adm_any?'公布了录取者 GPA':'没公布');if(G.note)add('有注意事项','有')}
+     const gnum=t=>{const ns=[...String(t||'').matchAll(/(?<![\d.])([234]\.\d{1,2})(?!\d)/g)].map(z=>+z[1]).filter(z=>z<=4.3);return ns.length?Math.max(...ns):null};
+     const bk=n=>n>=3.7?'3.7 以上':n>=3.5?'3.5–3.69':n>=3.3?'3.3–3.49':n>=3?'3.0–3.29':'3.0 以下';
+     const minB=t=>{if(!t)return null;const n=gnum(t);return n!=null?bk(n):/不设|无硬线|无最低|No minimum/i.test(t)?'不设最低':/官网未写/.test(t)?null:'写了但没具体分'};
+     const mu=minB(G.ug_min),mg=minB(G.gr_min),ma=minB(G.min_any);
+     if(mu)add('报名最低线·本科',mu);if(mg)add('报名最低线·硕士／研究生',mg);if(ma)add('报名最低线·没分本科硕士',ma);
+     if(!mu&&!mg&&!ma)add('报名最低线·没分本科硕士','官网没写');
+     const au=gnum(G.ug_adm),ag=gnum(G.gr_adm),aa=gnum(G.adm_any);
+     if(au!=null)add('录取者 GPA·本科',bk(au));if(ag!=null)add('录取者 GPA·硕士／研究生',bk(ag));if(aa!=null)add('录取者 GPA·没分本科硕士',bk(aa));
+     if(au==null&&ag==null&&aa==null)add('录取者 GPA·没分本科硕士',(G.ug_adm||G.gr_adm||G.adm_any)?'公布了但没具体分':'没公布');
+     if(G.note)add('有注意事项','有')}
    if(v.id==='iv'){const st=(/^(有面试|只面部分人|不面试|官网未写|Interview|Some applicants|No interview|Not stated)/i.exec(d)||[])[1];if(st)add('有没有面试',st);add('写了时间',/时间：|time:/i.test(d)?'写了':'没写')}
    if(v.id==='fund'){const T=TAS[x.seq];if(T){add('一年级要不要工作',T[0].split('：')[0]);add('二年级要不要工作',T[1].split('：')[0])}}
    if(v.id==='gre')add('录取者分数',/录取者一般|admitted students typically/.test(d)?'公布了':'没公布');
@@ -3012,7 +3020,7 @@ function facetsOf(v,x){
    if((m=/[≥>]=?\s*(3[0-4]\d)(?!\d)/.exec(d))){any=true;add('分数线','总分 '+m[1]+' 以上')}
    if(any){add('分数口径',/硬线|最低|至少|示警|低于/.test(d)?'硬线／最低分':/录取者|入学者|均|中位|典型|通常|多≥|常≥/.test(d)?'录取者的分数（参考）':'建议分／有竞争力的分')}
    if(v.id==='gre')add('写没写分数',any?'写了分数（线或参考）':'没写分数')}
-  if(v.id==='gpa'){const ns=[...d.matchAll(/(?<![\d.])([234]\.\d{1,2})(?!\d)/g)].map(z=>+z[1]);const n=ns.find(z=>z<4)??ns[0];add('GPA 线',n!=null?(n>=3.7?'3.7 以上':n>=3.5?'3.5–3.69':n>=3.3?'3.3–3.49':n>=3?'3.0–3.29':'3.0 以下'):'没写具体分')}
+  if(v.id==='gpa'&&!GPAS[x.seq]){const ns=[...d.matchAll(/(?<![\d.])([234]\.\d{1,2})(?!\d)/g)].map(z=>+z[1]);const n=ns.find(z=>z<4)??ns[0];add('GPA 线',n!=null?(n>=3.7?'3.7 以上':n>=3.5?'3.5–3.69':n>=3.3?'3.3–3.49':n>=3?'3.0–3.29':'3.0 以下'):'没写具体分')}
   if(DATEV.has(v.id)){for(const z of d.matchAll(/(1[0-2]|0?[1-9])\s*月|\b(jan|feb|mar|apr|may|jun|jul|aug|sept?|oct|nov|dec)[a-z]*\.?(?![a-z])|20\d\d[-/.](1[0-2]|0[1-9])/gi)){const n=z[1]?+z[1]:z[2]?MONN[z[2].slice(0,3).toLowerCase()]:+z[3];if(n)add('月份',n+' 月')}}
   if((m=/([2-5二两三四五])\s*封/.exec(d)))add('封数',(CNUM[m[1]]||m[1])+' 封');
   if(v.id==='fund'&&(m=/([3-7]|五|六)\s*年/.exec(d)))add('资助年限',(CNUM[m[1]]||m[1])+' 年');
