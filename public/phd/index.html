@@ -765,11 +765,12 @@ html[lang="en"] .pkw{margin-left:.28em}
     const mm=I.memo.get(s);if(mm!==undefined)return mm;CURS=s;
     const lead=/^\s*/.exec(s)[0],trail=s.length>lead.length?/\s*$/.exec(s)[0]:'';
     let out='',full=true;
-    if(hasC){const parts=s.split(DELIM);
+    if(hasC){const whole=look2(s.trim());/* 整句在词表里就直接用，避免被括号、冒号切开后半截没译 */
+      if(whole!=null)out=whole;else{const parts=s.split(DELIM);
       for(let i=0;i<parts.length;i++){const p=parts[i];
         if(i%2){let o='';for(const c of p)o+=PM[c]??c;out+=o;continue}
         if(!CJK.test(p)){out+=p;continue}
-        const en=piece(p);if(en==null){full=false;out+=p}else out+=en}}
+        const en=piece(p);if(en==null){full=false;out+=p}else out+=en}}}
     else out=s;
     out=tidy(out.replace(FWG,c=>FW[c]??c));
     out=lead+out.trim()+trail;
